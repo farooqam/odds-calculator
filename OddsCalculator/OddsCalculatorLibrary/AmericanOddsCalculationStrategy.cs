@@ -1,4 +1,6 @@
-﻿namespace Techniqly.OddsCalculator
+﻿using System.Linq;
+
+namespace Techniqly.OddsCalculator
 {
     public class AmericanOddsCalculationStrategy : IOddsCalculationStrategy
     {
@@ -6,6 +8,12 @@
         {
             var decimalOdds = ConvertToDecimalOdds(odds);
             return wager * (decimalOdds - 1m);
+        }
+
+        public decimal Calculate(decimal wager, params int[] odds)
+        {
+            var multiplier = odds.Aggregate(1m, (current, odd) => current * ConvertToDecimalOdds(odd));
+            return (multiplier - 1m) * wager;
         }
 
         private decimal ConvertToDecimalOdds(int odds)

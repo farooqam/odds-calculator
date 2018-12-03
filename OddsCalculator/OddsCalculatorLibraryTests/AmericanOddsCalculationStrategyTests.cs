@@ -25,10 +25,19 @@ namespace Techniqly.OddsCalculator
         }
 
         [Theory]
-        [InlineData(100, 145, -250, -450, )]
-        public void Calculate_CalculatesThreeTeamParlay(decimal wager, int odds1, int odds2, int odds3, decimal expectedReward)
+        [InlineData(100, 145, 150, 512.50)]
+        [InlineData(100, -1000, -3000, 13.67)]
+        [InlineData(100, -1000, 145, 169.5)]
+        public void Calculate_CalculatesParlay(decimal wager, int odds1, int odds2, decimal expectedReward)
         {
+            // Arrange
+            var strategy = new AmericanOddsCalculationStrategy();
 
+            // Act
+            var actualReward = strategy.Calculate(wager, odds1, odds2);
+
+            // Assert
+            actualReward.Should().BeApproximately(expectedReward, 2);
         }
     }
 }
